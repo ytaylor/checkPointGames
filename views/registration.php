@@ -9,16 +9,6 @@
             <input type="text" class="form-control" placeholder="Maria">
         </div>
         <div class="col">
-            <label for="exampleFormControlInput1">Apellidos</label>
-            <input type="text" class="form-control" placeholder="Apellidos">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <label for="exampleFormControlInput1">Teléfono</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="+34 ....">
-        </div>
-        <div class="col">
             <label for="exampleFormControlInput1">NIF</label>
             <input type="number" id="nifNum" name="nifNum" maxlength="8" class="form-control" placeholder="12345678" onkeyup="letraDNI()">
         </div>
@@ -27,6 +17,22 @@
             <label for="exampleFormControlInput1">Letra NIF</label>
             <input type="text" id="nifLet" name="nifLet" maxlength="1" class="form-control" placeholder="Letra del DNI" readonly>
         </div>
+      </div>
+
+    <div class="row">
+        <div class="col">
+            <label for="exampleFormControlInput1">Apellidos</label>
+            <input type="text" class="form-control" placeholder="Apellidos">
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <label for="exampleFormControlInput1">Teléfono</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="+34 ....">
+        </div>
+
     </div>
 
     <div class="form-group">

@@ -31,6 +31,7 @@ if(isset($_GET['price']) ){
     // ... Añadirá 1 al total de unidades y X euros del producto seleccionado.
     $_SESSION["udsTotal"] = $_SESSION["udsTotal"] + 1;
     $_SESSION["eurosTotal"] = $_SESSION["eurosTotal"] + $_GET["price"];
+
     if(isset($_GET['ref']) ){
         $ref = $_GET['ref'];
     }
@@ -45,16 +46,15 @@ if(isset($_GET['price']) ){
     }
 
     $price = $_GET['price'];
+
     //Creando el Carrito sino existe
     if (!isset($_SESSION['cartlines'])) {
         $_SESSION['cartlines'] = new Cart();
     }
-        if(isset($_GET['ref'])){
-            
-        }
-        if(isset($_GET['ref'])){
+
+    //Cuando voy a insertar en el carrito
+    if(isset($_GET['ref'])){
             $pos = $_SESSION['cartlines']->buscar_producto($ref);
-        
             if($pos!=-1) {
                 $product = $_SESSION['cartlines']->array_prod[$pos];
                 $newproduct = new CartLinea();
@@ -83,15 +83,14 @@ if(isset($_GET['cartUpDate'])){
 
     foreach($_SESSION['cartlines']->array_prod as $key=>$value){
 
-        if(isset($_GET['cantidadLinea'.$value->referencia .''])){
+        if(isset($_GET['cantidadLinea'.$key .''])){
 
-            if($_GET['stockLimit'.$value->referencia .''] < $_GET['cantidadLinea'.$value->referencia .'']){
+            if($_GET['stockLimit'.$value->referencia .''] < $_GET['cantidadLinea'.$key .'']){
                 // Guardar en variable de sesión el stock y la cantidad solicitada.
               // echo $_GET['stockLimit'.$value->referencia .'']. "stocklimit";
                 //echo $_GET['cantidadLinea'.$value->referencia .''];
                 $_SESSION['stockLimit'] = $_GET['stockLimit'.$value->referencia .''];
-                $_SESSION['cantidadLinea'] = $_GET['cantidadLinea'.$value->referencia .''];
-                echo "\n stock".$_GET['stockLimit'.$value->referencia .''];
+                $_SESSION['cantidadLinea'] = $_GET['cantidadLinea'.$key .''];
             }
             else{
                 $product= $_SESSION['cartlines']->array_prod[$_GET['posLinea'.$key .'']];
@@ -100,7 +99,7 @@ if(isset($_GET['cartUpDate'])){
                 $newproduct->categoria = $product->categoria;
                 $newproduct->price = $product->price;
                 $newproduct->referencia = $product->referencia;
-                $newproduct->cantidad= $_GET['cantidadLinea'.$value->referencia .''];
+                $newproduct->cantidad= $_GET['cantidadLinea'.$key .''];
                 $newproduct->stock= $product->stock;
                 $_SESSION['cartlines']->array_prod[$_GET['posLinea'.$key.'']]=$newproduct;
             }

@@ -25,8 +25,10 @@ class Cart
         $pos= -1;
         if($this->array_prod != null){
             foreach ($this->array_prod as $key => $value){
-                if($value->referencia == $ref){
-                    return $key;
+                if($value!=null) {
+                    if ($value->referencia == $ref) {
+                        return $key;
+                    }
                 }
             }
         }
@@ -35,6 +37,7 @@ class Cart
             return $pos;
         }
     }
+
 
     //verificar que exista el stock
     function verificar_stock($cant, $ref, $posLinea){
@@ -59,10 +62,11 @@ class Cart
         $sql = "SELECT refPedido FROM pedido WHERE fecha='$fecha' AND dni='$idCliente' ORDER BY refPedido desc LIMIT 1";
         $array = $tool->getArraySQL($sql);
         foreach ($this->array_prod as $key => $value) {
-            $ref = $array[0]['refPedido'];
-            $sql = "INSERT INTO lineapedido (refPedido, precio, cantidad, idProducto) VALUES ('$ref', '$value->price', '$value->cantidad', '$value->referencia')";
-            $result = $tool->insertData($sql);
-
+            if($value!=null) {
+                $ref = $array[0]['refPedido'];
+                $sql = "INSERT INTO lineapedido (refPedido, precio, cantidad, idProducto) VALUES ('$ref', '$value->price', '$value->cantidad', '$value->referencia')";
+                $result = $tool->insertData($sql);
+            }
         }
         return $result;
     }

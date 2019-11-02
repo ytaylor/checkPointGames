@@ -18,9 +18,6 @@
     </div>
 </div>
 
-
-
-
 <div>
     <h1 align="center">CARRITO DE LA COMPRA</h1>
     <table class="table" style="padding: 0;margin: 0">
@@ -49,7 +46,6 @@
         } else {
             //echo "estoy aqui";
             echo '<script>$("#actualizarModal").modal("hide")</script>';
-
         }
     }
 
@@ -66,7 +62,7 @@
             <td>' . $value->categoria . '</td>
             <td>
             <form name="form" method="GET">
-                <input type="number" id="cantidadLinea" name="cantidadLinea'.$value->referencia .'" maxlength="8"  value="' . $value->cantidad . '">
+                <input type="number" id="cantidadLinea" name="cantidadLinea'.$key .'" maxlength="8"  value="' . $value->cantidad . '">
                 <input  hidden id="refLinea" name="refLinea'.$value->referencia .'" maxlength="8"  value="' . $value->referencia . '">
                 <input  hidden id="posLinea" name="posLinea'.$key.'" maxlength="8"  value="' . $key . '">
                 <input  hidden id="cartUpDate" name="cartUpDate" maxlength="8"  value="' . $key . '">
@@ -98,7 +94,7 @@
          </form>
             
             <form method="get">
-            <input type="submit" href="index.php" class="btnNormal2" href="index.php" value="SEGUIR COMPRANDO">
+            <input type="submit" class="btnNormal2" href="index.php" value="SEGUIR COMPRANDO">
             </form>
             
             <button class="btnBuy" name="buyCart" onclick="getModal()">
