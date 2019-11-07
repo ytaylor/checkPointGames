@@ -147,6 +147,7 @@ if(isset($_GET["user"]) && isset($_GET["password"])){
     $array = $user->login($_GET["user"], $_GET["password"]);
     if(count($array)>0){
         $_SESSION['user']=$_GET["user"];
+        $_SESSION['idCliente']=$array[0]['nifUser'];
     }
 }
 

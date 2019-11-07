@@ -50,7 +50,6 @@ class Tools{
             $rawdata[$i] = $row;
             $i++;
         }
-        $this->disconnectDB($conexion);
         return $rawdata;
     }
 

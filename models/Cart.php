@@ -49,7 +49,8 @@ class Cart
     // Guardar compra del carrito
     function guardar_pedido ($total){
         $fecha = date ("Y/m/d");
-        $idCliente = "03876311Y";
+        $idCliente = $_SESSION['idCliente'];
+
         $sql = "INSERT INTO pedido (fecha, dni, total) VALUES ('$fecha', '$idCliente',$total)";
         $tool = new Tools();
         $result = $tool->insertData($sql);
@@ -57,20 +58,24 @@ class Cart
         // BUSCAR RefPedido
         $sql = "SELECT refPedido FROM pedido WHERE fecha='$fecha' AND dni='$idCliente' ORDER BY refPedido desc LIMIT 1";
         $array = $tool->getArraySQL($sql);
+
         foreach ($this->array_prod as $key => $value) {
+
             if($value!=null) {
                 $ref = $array[0]['refPedido'];
                 $sql = "INSERT INTO lineapedido (refPedido, precio, cantidad, idProducto, nombre, totalUni) VALUES ('$ref', '$value->price', '$value->cantidad', '$value->referencia', '$value->nombre', '$value->totalUni')";
                 $result = $tool->insertData($sql);
 
-               /* //Actualizar el stock del producto
                 //Buscar el producto
-                $sqlFindProduct = "SELECT stock FROM games WHERE idGame='$result[0]['idProducto']'";
-                $resultFindProduct = $tool->insertData($sqlFindProduct);
+               $idProducto = $value->referencia;
+                $sqlFindProduct = "SELECT stock FROM games WHERE idGame='$idProducto'";
+                $resultFindProduct = $tool->getArraySQL($sqlFindProduct);
 
-                $new_stock =
-                $sqlUpdateStock = "UPDATE producto set stock= ";*/
-
+                //Actualizar el stock del producto
+                $new_stock =$resultFindProduct[0]['stock'] - $value->cantidad;
+                echo $resultFindProduct[0]['stock'];
+                $sqlUpdateStock = "UPDATE games set stock = '$new_stock'where idGame='$idProducto'";
+                $result2=$tool->insertData($sqlUpdateStock);
             }
         }
         return $result;
