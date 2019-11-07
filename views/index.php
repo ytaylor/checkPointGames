@@ -130,12 +130,14 @@ if(isset($_GET["province"])){
 
 //Comprar
 if(isset($_GET["comprar"])){
+    if(isset($_SESSION['user'])){
     if(isset($_SESSION["cartlines"])) {
         $_SESSION["cartlines"]->guardar_pedido($_SESSION["eurosTotal"]);
         $_SESSION["udsTotal"] = 0;
         //resto el precio de producto eliminado
         $_SESSION["eurosTotal"] = 0;
         unset($_SESSION['cartlines']);
+    }
     }
 }
 
@@ -228,13 +230,29 @@ require_once 'views/header.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Compra Realizada</h5>
+                <?php
+                if(isset($_SESSION['user'])){
+                    echo '                
+                <h5 class="modal-title" id="exampleModalLabel">Compra Realizada</h5>';
+                }else{
+                    echo '                
+                <h5 class="modal-title" id="exampleModalLabel">Error: Necesario Iniciar Sesión</h5>';
+                }
+
+                ?>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Su compra se ha realizado con exito. Muchas Gracias por confiar en nosotros.
+                <?php
+                if(isset($_SESSION['user'])){
+                    echo 'Su compra se ha realizado con exito. Muchas Gracias por confiar en nosotros.
+';
+                }else{
+                    echo 'Para realizar la coompra es obligatorio iniciar sesión.';
+                }
+                ?>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -242,6 +260,7 @@ require_once 'views/header.php';
         </div>
     </div>
 </div>
+
 
 
 <script>
@@ -254,15 +273,14 @@ require_once 'views/header.php';
         });
     });
 
-
-
     function getModal(){
-        $('#exampleModal').modal('show');
         $.ajax({
             url: 'index.php?cartDetail=cartDetail&comprar=comprar',
             type: 'get',
             success: function(response) {
                 console.log(response);
+                $('#exampleModal').modal('show');
+
             }
         });
 
