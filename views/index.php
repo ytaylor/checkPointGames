@@ -64,6 +64,8 @@ if(isset($_GET['price']) ){
                 $newproduct->referencia = $product->referencia;
                 $newproduct->cantidad = $product->cantidad+1;
                 $newproduct->stock=$product->stock;
+                $newproduct->totalUni = $newproduct->cantidad * $newproduct->price;
+
                 $_SESSION['cartlines']->array_prod[$pos] = $newproduct;
             }
             else {
@@ -101,6 +103,7 @@ if(isset($_GET['cartUpDate'])){
                 $newproduct->referencia = $product->referencia;
                 $newproduct->cantidad= $_GET['cantidadLinea'.$key .''];
                 $newproduct->stock= $product->stock;
+                $newproduct->totalUni = $product->price*$newproduct->cantidad;
                 $_SESSION['cartlines']->array_prod[$_GET['posLinea'.$key.'']]=$newproduct;
             }
 
@@ -128,7 +131,7 @@ if(isset($_GET["province"])){
 //Comprar
 if(isset($_GET["comprar"])){
     if(isset($_SESSION["cartlines"])) {
-        $_SESSION["cartlines"]->guardar_pedido();
+        $_SESSION["cartlines"]->guardar_pedido($_SESSION["eurosTotal"]);
         $_SESSION["udsTotal"] = 0;
         //resto el precio de producto eliminado
         $_SESSION["eurosTotal"] = 0;
@@ -169,6 +172,14 @@ require_once 'views/header.php';
 
                 require_once 'views/upGame.php';
             }
+           else if(isset($_GET['pedidos'])){
+
+                require_once 'views/pedidos.php';
+            }
+            else if(isset($_GET['devoluciones'])){
+
+                require_once 'views/devoluciones.php';
+            }
             else {
                 require_once 'views/main.php';
             }
@@ -182,9 +193,6 @@ require_once 'views/header.php';
             <!-- Ofertas y novedades -->
             <?php
             include "views/news.php";
-            ?>
-            <?php
-            include "views/oferts.php";
             ?>
             <!-- Lista de juegos más demandados entre otras cosas -->
             <?php

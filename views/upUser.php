@@ -1,7 +1,5 @@
 <?php
 
-	include ("conexionPHP.php");
-
 	$newNif = $_POST['nifNum'].$_POST['nifLet'];
 	$newName = $_POST['nom'];
 	$newLastName = $_POST['ape'];
@@ -16,14 +14,14 @@
 	$newRpassW = $_POST["rpassw"];
 
 	// Comprobar que todos los campos están rellenados
-	if($newNif== null || $newName == null || $newLastName == null || 
+	if($newNif== null || $newName == null || $newLastName == null ||
 		$newPhone == null || $newAddress == null || $newPostal == null ||
 		$newNick == null){
 
 		echo "Error. Rellena todos los campos, por favor";
 	}
 	else{
-		// Comprobar si las contraseñas coinciden y el email es correcto       
+		// Comprobar si las contraseñas coinciden y el email es correcto
 		if($newPassW == $newRpassW && filter_var($newEmail, FILTER_VALIDATE_EMAIL)){
 
 			// añadir juego a la base de datos

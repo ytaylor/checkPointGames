@@ -6,9 +6,6 @@ class Cart
     public $num_productos;
     public $array_prod;
 
-    function carrito () {
-        $this->num_productos=0;
-    }
     //introduce un nuevo elemento en el carrito
     function introduce_producto($cartline){
         $this->array_prod[$this->num_productos] = $cartline;
@@ -32,12 +29,11 @@ class Cart
                 }
             }
         }
-        
+
         if($pos==-1){
             return $pos;
         }
     }
-
 
     //verificar que exista el stock
     function verificar_stock($cant, $ref, $posLinea){
@@ -51,10 +47,10 @@ class Cart
     }
 
     // Guardar compra del carrito
-    function guardar_pedido (){
+    function guardar_pedido ($total){
         $fecha = date ("Y/m/d");
         $idCliente = "03876311Y";
-        $sql = "INSERT INTO pedido (fecha, dni) VALUES ('$fecha', '$idCliente')";
+        $sql = "INSERT INTO pedido (fecha, dni, total) VALUES ('$fecha', '$idCliente',$total)";
         $tool = new Tools();
         $result = $tool->insertData($sql);
 
@@ -64,8 +60,17 @@ class Cart
         foreach ($this->array_prod as $key => $value) {
             if($value!=null) {
                 $ref = $array[0]['refPedido'];
-                $sql = "INSERT INTO lineapedido (refPedido, precio, cantidad, idProducto) VALUES ('$ref', '$value->price', '$value->cantidad', '$value->referencia')";
+                $sql = "INSERT INTO lineapedido (refPedido, precio, cantidad, idProducto, nombre, totalUni) VALUES ('$ref', '$value->price', '$value->cantidad', '$value->referencia', '$value->nombre', '$value->totalUni')";
                 $result = $tool->insertData($sql);
+
+               /* //Actualizar el stock del producto
+                //Buscar el producto
+                $sqlFindProduct = "SELECT stock FROM games WHERE idGame='$result[0]['idProducto']'";
+                $resultFindProduct = $tool->insertData($sqlFindProduct);
+
+                $new_stock =
+                $sqlUpdateStock = "UPDATE producto set stock= ";*/
+
             }
         }
         return $result;

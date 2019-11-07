@@ -8,6 +8,7 @@ class CartLinea
     public $cantidad;
     public $price;
     public $stock;
+    public $totalUni;
 
     function setValues($ref, $nom, $cat, $cant,$price, $stock){
        $this->referencia =$ref;
@@ -16,8 +17,10 @@ class CartLinea
         $this->categoria = $cat;
         $this->price = $price;
         $this->stock = $stock;
+        $this->totalUni=$cant*$price;
     }
     function updateCantidad(){
         $this->cantidad= $this->cantidad+1;
     }
+
 }

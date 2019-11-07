@@ -1,6 +1,6 @@
 
 <h2> RELLENA EL REGISTRO</h2>
-<form>
+<form method="get" action="index.php?registration=registration">
     <label for="dp" class="encabezado">Datos personales: </label></br>
 
     <div class="row">
@@ -101,7 +101,7 @@
             <input type="password" class="form-control" >
         </div>
     </div>
-    <button style="padding: 10px" type="submit" class="btn btn-warning"> Registrarse</button>
+    <input style="padding: 10px" type="submit" class="btn btn-warning"> Registrarse</input>
 </form>
 
 
