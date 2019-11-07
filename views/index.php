@@ -139,6 +139,15 @@ if(isset($_GET["comprar"])){
     }
 }
 
+//Login
+if(isset($_GET["user"]) && isset($_GET["password"])){
+    $user = new Users();
+    $array = $user->login($_GET["user"], $_GET["password"]);
+    if(count($array)>0){
+        $_SESSION['user']=$_GET["user"];
+    }
+}
+
 require_once 'views/header.php';
 
 ?>

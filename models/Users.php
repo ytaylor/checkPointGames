@@ -37,6 +37,12 @@ class Users
         return $result;
     }
 
+    function login($user, $password){
+        $sql = "SElECT * FROM users where nick='.$user.' and password='.$password.'";
+        $tool = new Tools();
+        $result = $tool->insertData($sql);
+        return $result;
+    }
 
 
 
