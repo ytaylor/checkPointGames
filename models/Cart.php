@@ -73,7 +73,6 @@ class Cart
 
                 //Actualizar el stock del producto
                 $new_stock =$resultFindProduct[0]['stock'] - $value->cantidad;
-                echo $resultFindProduct[0]['stock'];
                 $sqlUpdateStock = "UPDATE games set stock = '$new_stock'where idGame='$idProducto'";
                 $result2=$tool->insertData($sqlUpdateStock);
             }

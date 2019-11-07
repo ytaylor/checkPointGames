@@ -140,7 +140,6 @@ if(isset($_GET["comprar"])){
     }
     }
 }
-
 //Login
 if(isset($_GET["user"]) && isset($_GET["password"])){
     $user = new Users();
@@ -148,6 +147,14 @@ if(isset($_GET["user"]) && isset($_GET["password"])){
     if(count($array)>0){
         $_SESSION['user']=$_GET["user"];
         $_SESSION['idCliente']=$array[0]['nifUser'];
+    }
+}
+//Devolver
+if(isset($_GET["cantDevolver"]) && isset($_GET["refPedido"])){
+    $pedido = new Pedido();
+    $result= $pedido->devolverPedido($_GET["refPedido"],$_GET["cantidad"],$_GET["cantDevolver"], $_GET["idProducto"] );
+    if($result==true){
+
     }
 }
 

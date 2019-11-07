@@ -22,8 +22,28 @@ class Pedido
     }
 
     //Devolver un atributo de un pedido
-    function devolverPeddido($refPedido, $refProducto, $cant){
+    function devolverPedido($numLineaPedido, $cant, $cantDevolver, $idProducto){
+        $tool = new Tools();
+        //actualizar la linea de pedido si no se ha devuelto todo
+        if($cant>$cantDevolver) {
+            $nuevaCant = $cant-$cantDevolver;
+            $sqlUpdatePedido = "UPDATE lineapedido set cantidad='$nuevaCant'";
+            $tool->insertData($sqlUpdatePedido);
+        }
+        //Eliminar la linea de pedido si elimino el valor
+        if($cant==$cantDevolver){
+            $sqlEliminarPedido = "DELETE FROM lineapedido where numPedido='$numLineaPedido'";
+            $tool->insertData($sqlEliminarPedido);
+        }
+        //Aumentar el stock del juego
+        //Buscar el producto
+        $sqlFindProduct = "SELECT stock FROM games WHERE idGame='$idProducto'";
+        $resultFindProduct = $tool->getArraySQL($sqlFindProduct);
 
+        $new_stock = $resultFindProduct[0]['stock'] + $cantDevolver;
+        $sqlUpdateStock = "UPDATE games set stock = '$new_stock'where idGame='$idProducto'";
+        $result = $tool->insertData($sqlUpdateStock);
+        return $result;
     }
 
 

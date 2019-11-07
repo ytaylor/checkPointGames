@@ -41,10 +41,13 @@ foreach ($array as $key=>$rows) {
         <td>'.$rows2['cantidad'].' </td>
         <td> '.$rows2['idProducto'].'</td>
         <td>'.$rows2['totalUni'].'</td>
+        
         <td>
             <form action="index.php">
                 <input name="cantDevolver" type="text" size="4">
-                <input hidden name="refPedido" type="text" >
+                <input hidden name="cantidad" type="text"  value="'.$rows2['cantidad'].'">
+                <input hidden name="idProducto" type="text"  value="'.$rows2['idProducto'].'">
+                <input hidden name="refPedido" type="text"  value="'.$rows2['numPedido'].'">
                 <button name="devoluciones" type="submit" class="btnNormal2" value="devoluciones">Devolver</button>
             </form>
         </td>
