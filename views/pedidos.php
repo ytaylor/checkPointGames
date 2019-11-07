@@ -15,12 +15,12 @@
             foreach ($array as $key=>$rows) {
                 echo '
      <tr  data-id='.$rows['refPedido'].' data-parent="0" data-level="1">
-        <td colspan="7" data-column="name">Fecha :' . $rows['fecha'] . '</td>       
+        <td colspan="6" data-column="name">Fecha :' . $rows['fecha'] . '</td>       
     </tr>
     
      <tr data-id='.$rows['refPedido'].'+1 data-parent='.$rows['refPedido'].' data-level="2">
-        <td colspan="3" data-column="name">Ref. Pedido: ' . $rows['refPedido'] . '</td>
-        <td colspan="3">Cliente :' . $rows['dni'] . '</td>
+        <td colspan="2" data-column="name">Ref. Pedido: ' . $rows['refPedido'] . '</td>
+        <td colspan="2">Cliente :' . $rows['dni'] . '</td>
         <td colspan="2">Total :' . $rows['total'] . '</td>
     </tr>
     ';
@@ -33,7 +33,6 @@
         <td>Cantidad</td>
         <td>IdProducto</td>
         <td>Total a Pagar</td>
-        <td>Acciones</td>
     </tr>
 ';
                 foreach ($array_lineaspedido as $item2 => $rows2) {
@@ -45,14 +44,7 @@
         <td>'.$rows2['cantidad'].' </td>
         <td> '.$rows2['idProducto'].'</td>
         <td>'.$rows2['totalUni'].'</td>
-        <td>
-            <form action="index.php">
-                <input name="cantDevolver" type="text" size="4">
-                <input hidden name="refPedido" type="text" >
-                <button name="devoluciones" type="submit" class="btnNormal2" value="devoluciones">Devolver</button>
-            </form>
-        </td>
-    </tr>
+        </tr>
     ';
                 }
             }
