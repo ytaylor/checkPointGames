@@ -230,6 +230,7 @@ if(isset($_GET["user"]) && isset($_GET["password"])){
     $array = $user->login($_GET["user"], $_GET["password"]);
     if(count($array)>0){
         $_SESSION['user']=$_GET["user"];
+        $_SESSION['pass']= $_GET["password"];
         $_SESSION['idCliente']=$array[0]['nifUser'];
         $_SESSION['rol']=$array[0]['rol'];
 
@@ -238,8 +239,17 @@ if(isset($_GET["user"]) && isset($_GET["password"])){
             $array = $pedido->pedidosPendientes();
             $_SESSION['pedidosPendientes']= $array;
             $_SESSION['countPedidos']= count($array);
+            //Si hay pedidos pendientes
+            if(count( $_SESSION['pedidosPendientes']) >0 ) {
+                echo '<script>$("#pendientesModal").modal("show")</script>';
+                $userLogin= $_SESSION['user'];
+                $userPass=  $_SESSION['pass'];
+                $url="index.php?user=$userLogin&password=$userPass";
+            }
+            else{
+                echo '<script>$("#pendientesModal").modal("hide")</script>';
 
-            echo '<script>$("#pendientesModal").modal("show")</script>';
+            }
 
         }
     }
@@ -270,6 +280,8 @@ if(isset($_GET['enviarPedidos'])){
             $pedido->enviarPedidosPendientes($value['refPedido']);
         }
     }
+    unset($_SESSION['pedidosPendientes']);
+    unset($_SESSION['countPedidos']);
 }
 
 require_once 'views/header.php';
