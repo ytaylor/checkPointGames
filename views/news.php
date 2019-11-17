@@ -1,6 +1,12 @@
   <div class="block">
       <form action="index.php">
-    <button name="cartDetail" type="submit" class="btnNormal2" value="cartDetail">Comprar</button>
+    <button name="novedades" type="submit" class="btnNormal2" value="novedades">Novedades</button>
+      </form>
+  </div>
+
+  <div class="block">
+      <form action="index.php">
+    <button name="ofertas" type="submit" class="btnNormal2" value="ofertas">Ofertas</button>
       </form>
   </div>
 

@@ -1,5 +1,6 @@
 <?php
 //Incluimos todas las clases y funciones del proyecto
+
 include 'controllers/functions.php';
 include "models/Games.php";
 include "models/Categoria.php";
@@ -10,6 +11,89 @@ include "models/Municipio.php";
 include "models/Cart.php";
 include "models/Pedido.php";
 session_start();
+?>
+<!-- CCS originales -->
+<link rel="stylesheet" type="text/css" href="../css/estilosHome.css">
+<link rel="stylesheet" type="text/css" href="../css/fontello.css">
+<link rel="stylesheet" type="text/css" href="../css/simple-sidebar.css">
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+
+<!-- CSS y los JS para el uso de Bootstrap -->
+<link rel="stylesheet" type="text/css" href="../boostrap/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- incluir mi archivo java Script-->
+<script src="js/javascript.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript"  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+
+<div class="modal fade " id="pendientesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <?php
+                    if(isset($_SESSION['countPedidos'])) {
+                        $cant = $_SESSION['countPedidos'];
+                        echo "Tienes $cant Pedidos Pendientes";
+                    }
+                    ?>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="tree-table" class="table table-hover table-bordered">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Referencia</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Enviar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                if(isset($_SESSION['pedidosPendientes'])) {
+
+                    foreach ($_SESSION['pedidosPendientes'] as $item => $value) {
+                        echo '
+                            <tr>
+                               <td>' . $value['refPedido']. '</td>
+                               <td>' . $value['fecha']. '</td>
+                               <td>' . $value['dni']. '</td>
+                               <td>' . $value['total']. '</td>
+                               <td>  
+                               <form action="index.php">      
+                                   <input type="checkbox" aria-label="Checkbox for following text input">
+                                   <input hidden type="text" value="'.$value['refPedido'].'" name="refPedido'.$value['refPedido'].'">
+                                 </td>
+                            </tr>
+                        ';
+
+                    }
+                }
+                ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+
+                <input type="submit" name="enviarPedidos" value="Enviar Pedidos" class="btn btn-secondary" >
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php
 
 //Para las categorias
 if(isset($_GET["cat"]) && isset($_GET["subcat"])){
@@ -147,14 +231,44 @@ if(isset($_GET["user"]) && isset($_GET["password"])){
     if(count($array)>0){
         $_SESSION['user']=$_GET["user"];
         $_SESSION['idCliente']=$array[0]['nifUser'];
+        $_SESSION['rol']=$array[0]['rol'];
+
+        if($_SESSION['rol'] == "Administrador") {
+            $pedido = new Pedido();
+            $array = $pedido->pedidosPendientes();
+            $_SESSION['pedidosPendientes']= $array;
+            $_SESSION['countPedidos']= count($array);
+
+            echo '<script>$("#pendientesModal").modal("show")</script>';
+
+        }
     }
 }
 //Devolver
-if(isset($_GET["cantDevolver"]) && isset($_GET["refPedido"])){
+if(isset($_GET["devoluciones"]) && isset($_GET["refPedido"])){
     $pedido = new Pedido();
-    $result= $pedido->devolverPedido($_GET["refPedido"],$_GET["cantidad"],$_GET["cantDevolver"], $_GET["idProducto"] );
-    if($result==true){
+    $array_lineaspedido = $pedido->getDataLineaPedido($_GET['refPedido']);
+    foreach ($array_lineaspedido as $key => $value) {
+        if(isset($_GET["numPedido'.$key.'"])){
+            $result= $pedido->devolverPedido($_GET["numPedido$key"],$_GET["cantidad$key"],$_GET["cantDevolver$key
+            "], $_GET["idProducto$key"] );
+        }
+    }
+}
 
+//Cerrar sesíón
+if(isset($_GET["closeSession"])){
+    unset($_SESSION['user']);
+    unset($_SESSION['idCliente']);
+}
+
+//Devolver Pedidos
+if(isset($_GET['enviarPedidos'])){
+    $pedido = new Pedido();
+    foreach ($_SESSION['pedidosPendientes'] as $key => $value) {
+        if(isset($_GET['refPedido'.$value['refPedido']])){
+            $pedido->enviarPedidosPendientes($value['refPedido']);
+        }
     }
 }
 
@@ -183,25 +297,30 @@ require_once 'views/header.php';
             {
                 require_once 'views/cartDetail.php';
             }
+
             else if(isset($_GET['registration'])){
 
                 require_once 'views/registration.php';
             }
-            else if(isset($_GET['upGame'])){
 
-                require_once 'views/upGame.php';
+            else if(isset($_GET['upGame'])){
+                    require_once 'views/upGame.php';
             }
+
            else if(isset($_GET['pedidos'])){
 
                 require_once 'views/pedidos.php';
             }
+
             else if(isset($_GET['devoluciones'])){
 
                 require_once 'views/devoluciones.php';
             }
+
             else {
                 require_once 'views/main.php';
             }
+
             ?>
         </div>
 
@@ -271,6 +390,7 @@ require_once 'views/header.php';
 
 
 
+
 <script>
     $(document).ready(function(){
         $('select[name="idProvi"]').change(function() {
@@ -294,7 +414,6 @@ require_once 'views/header.php';
 
     }
 
-
     function letraDNI(){
         var letter = document.getElementById("nifLet");
         var dni = document.getElementById("nifNum").value;
@@ -308,4 +427,6 @@ require_once 'views/header.php';
         letter.value=letra;
     }
 </script>
+
+
 

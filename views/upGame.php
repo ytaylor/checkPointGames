@@ -1,6 +1,6 @@
 <?php
 
-	$mysqli = mysqli_connect("localhost", "root", "parribadellio*89", "checkpointgames");
+	$mysqli = mysqli_connect("localhost", "root", "", "checkpointgames");
         if($mysqli){
         }else{
             echo 'Ha sucedido un error inexperado en la conexion de la base de datos<br>';

@@ -327,6 +327,19 @@
         float: right;
       }
 
+      .btnClose{
+        background-color: #690808;
+        border-radius: 4px 4px 4px 4px;
+        -moz-border-radius: 4px 4px 4px 4px;
+        -webkit-border-radius: 4px 4px 4px 4px;
+        border: 0px solid #000000;
+        font-weight: 600;
+        width: 150px;
+        height: 25px;
+        color: white;
+        float: center;
+      }
+
       .btnPrueba{
         width: 600px;
         background-color: #f6cd5e;
@@ -430,6 +443,42 @@
         color: #f6cd5e;
       }
 
+      /*------------- MIS COMPRAS ---------------------------------*/
+      .zonePurple{
+        background: #0E021C;
+        color: #B47EF7;
+        font-weight: 600;
+      }
+      .zonePurple2{
+        background: #4b05a1;
+        color: white;
+        font-weight: 600;
+      }
+      .zonePurple3{
+        background: #C3A2EB;
+        color: #4b05a1;
+        font-weight: 600;
+      }
+      .btnDevolver{
+        background-color: #4b05a1;
+        border-radius: 5px 5px 5px 5px;
+        -moz-border-radius: 5px 5px 5px 5px;
+        -webkit-border-radius: 5px 5px 5px 5px;
+        border: 0px solid #000000;
+        font-weight: 600;
+        width: 40px;
+        height: 30px;
+        color: white;
+        font-size: initial;
+      }
+
+      .modalTxt{
+        font-weight: 600;
+        color: #4b05a1;
+        margin-top: 20px;
+        margin-bottom: 0px;
+        font-size: initial;
+      }
 
 
       ul.dropdown-cart{

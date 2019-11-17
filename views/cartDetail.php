@@ -66,7 +66,7 @@
                 <input  hidden id="refLinea" name="refLinea'.$value->referencia .'" maxlength="8"  value="' . $value->referencia . '">
                 <input  hidden id="posLinea" name="posLinea'.$key.'" maxlength="8"  value="' . $key . '">
                 <input  hidden id="cartUpDate" name="cartUpDate" maxlength="8"  value="' . $key . '">
-                <input   id="stockLimit" name="stockLimit'.$value->referencia .'" maxlength="8"  value="' . $value->stock . '">
+                <input  hidden id="stockLimit" name="stockLimit'.$value->referencia .'" maxlength="8"  value="' . $value->stock . '">
                 <input  hidden id="cartDetail" name="cartDetail" maxlength="8"  value="cartDetail">
             </td>
                 <td>' . $value->price . '</td>
