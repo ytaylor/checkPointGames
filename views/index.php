@@ -11,15 +11,47 @@ include "models/Municipio.php";
 include "models/Cart.php";
 include "models/Pedido.php";
 session_start();
+
+//Login
+if(isset($_GET["user"]) && isset($_GET["password"])){
+    $user = new Users();
+    $array = $user->login($_GET["user"], $_GET["password"]);
+    if(count($array)>0){
+        $_SESSION['user']=$_GET["user"];
+        $_SESSION['pass']= $_GET["password"];
+        $_SESSION['idCliente']=$array[0]['nifUser'];
+        $_SESSION['rol']=$array[0]['rol'];
+
+        if(isset($_SESSION['rol'])){
+            if($_SESSION['rol'] == "Administrador") {
+                $pedido = new Pedido();
+                $array = $pedido->pedidosPendientes();
+                $_SESSION['pedidosPendientes'] = $array;
+                $_SESSION['countPedidos'] = count($array);
+            }
+            if($_SESSION['rol'] == "Usuario") {
+                $pedido = new Pedido();
+                $array = $pedido->pedidosPendientesUser($_SESSION['idCliente']);
+                //Guardo en cookies para que dure 24 horas
+                setcookie('pedidosPendientesUser', serialize($array), time() + (86400 * 30), "/"); // 86400 = 1 day
+                setcookie('countPedidosUser', count($array), time() + (86400 * 30), "/"); // 86400 = 1 day
+            }
+        }
+
+    }
+
+}
+
+
 ?>
 <!-- CCS originales -->
-<link rel="stylesheet" type="text/css" href="../css/estilosHome.css">
-<link rel="stylesheet" type="text/css" href="../css/fontello.css">
-<link rel="stylesheet" type="text/css" href="../css/simple-sidebar.css">
+<link rel="stylesheet" type="text/css" href="css/estilosHome.css">
+<link rel="stylesheet" type="text/css" href="css/fontello.css">
+<link rel="stylesheet" type="text/css" href="css/simple-sidebar.css">
 <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 
 <!-- CSS y los JS para el uso de Bootstrap -->
-<link rel="stylesheet" type="text/css" href="../boostrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="boostrap/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -29,7 +61,6 @@ session_start();
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script type="text/javascript"  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
-
 <div class="modal fade " id="pendientesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -55,14 +86,13 @@ session_start();
                         <th scope="col">Cliente</th>
                         <th scope="col">Total</th>
                         <th scope="col">Enviar</th>
-                      </tr>
+                    </tr>
                     </thead>
                     <tbody>
                     <?php
-                if(isset($_SESSION['pedidosPendientes'])) {
-
-                    foreach ($_SESSION['pedidosPendientes'] as $item => $value) {
-                        echo '
+                    if(isset($_SESSION['pedidosPendientes'])) {
+                        foreach ($_SESSION['pedidosPendientes'] as $item => $value) {
+                            echo '
                             <tr>
                                <td>' . $value['refPedido']. '</td>
                                <td>' . $value['fecha']. '</td>
@@ -70,15 +100,13 @@ session_start();
                                <td>' . $value['total']. '</td>
                                <td>  
                                <form action="index.php">      
-                                   <input type="checkbox" aria-label="Checkbox for following text input">
-                                   <input hidden type="text" value="'.$value['refPedido'].'" name="refPedido'.$value['refPedido'].'">
+                                   <input type="checkbox" name="refPedido'.$value['refPedido'].'" value="'.$value['refPedido'].'" >
                                  </td>
                             </tr>
                         ';
-
+                        }
                     }
-                }
-                ?>
+                    ?>
                     </tbody>
                 </table>
             </div>
@@ -224,44 +252,30 @@ if(isset($_GET["comprar"])){
     }
     }
 }
+
 //Login
 if(isset($_GET["user"]) && isset($_GET["password"])){
-    $user = new Users();
-    $array = $user->login($_GET["user"], $_GET["password"]);
-    if(count($array)>0){
-        $_SESSION['user']=$_GET["user"];
-        $_SESSION['pass']= $_GET["password"];
-        $_SESSION['idCliente']=$array[0]['nifUser'];
-        $_SESSION['rol']=$array[0]['rol'];
-
+        if(isset($_SESSION['rol'])){
         if($_SESSION['rol'] == "Administrador") {
-            $pedido = new Pedido();
-            $array = $pedido->pedidosPendientes();
-            $_SESSION['pedidosPendientes']= $array;
-            $_SESSION['countPedidos']= count($array);
-            //Si hay pedidos pendientes
-            if(count( $_SESSION['pedidosPendientes']) >0 ) {
+            if (count($_SESSION['pedidosPendientes']) > 0) {
                 echo '<script>$("#pendientesModal").modal("show")</script>';
-                $userLogin= $_SESSION['user'];
-                $userPass=  $_SESSION['pass'];
-                $url="index.php?user=$userLogin&password=$userPass";
-            }
-            else{
+            } else {
                 echo '<script>$("#pendientesModal").modal("hide")</script>';
 
             }
+        }
 
         }
-    }
+
 }
+
 //Devolver
 if(isset($_GET["devoluciones"]) && isset($_GET["refPedido"])){
     $pedido = new Pedido();
     $array_lineaspedido = $pedido->getDataLineaPedido($_GET['refPedido']);
     foreach ($array_lineaspedido as $key => $value) {
-        if(isset($_GET["numPedido'.$key.'"])){
-            $result= $pedido->devolverPedido($_GET["numPedido$key"],$_GET["cantidad$key"],$_GET["cantDevolver$key
-            "], $_GET["idProducto$key"] );
+        if(isset($_GET["numPedido$key"])){
+            $result= $pedido->devolverPedido($_GET["numPedido$key"],$_GET["cantidad$key"],$_GET["cantDevolver$key"], $_GET["idProducto$key"] );
         }
     }
 }
@@ -272,7 +286,7 @@ if(isset($_GET["closeSession"])){
     unset($_SESSION['idCliente']);
 }
 
-//Devolver Pedidos
+//Enviar Pedidos
 if(isset($_GET['enviarPedidos'])){
     $pedido = new Pedido();
     foreach ($_SESSION['pedidosPendientes'] as $key => $value) {
@@ -283,6 +297,7 @@ if(isset($_GET['enviarPedidos'])){
     unset($_SESSION['pedidosPendientes']);
     unset($_SESSION['countPedidos']);
 }
+
 
 require_once 'views/header.php';
 
@@ -327,6 +342,10 @@ require_once 'views/header.php';
             else if(isset($_GET['devoluciones'])){
 
                 require_once 'views/devoluciones.php';
+            }
+
+            else if(isset($_GET['pending'])){
+                    require_once 'views/pending.php';
             }
 
             else {
@@ -400,19 +419,15 @@ require_once 'views/header.php';
     </div>
 </div>
 
-
-
-
 <script>
     $(document).ready(function(){
         $('select[name="idProvi"]').change(function() {
             var selected_option_value=$("#idProvi option:selected").val();
             //alert(selected_option_value);
-           window.history.pushState('index.php?registration=registration', 'Registrar', "index.php?registration=registration&province="+selected_option_value);
-           location.reload();
+            window.history.pushState('index.php?registration=registration', 'Registrar', "index.php?registration=registration&province="+selected_option_value);
+            location.reload();
         });
     });
-
     function getModal(){
         $.ajax({
             url: 'index.php?cartDetail=cartDetail&comprar=comprar',
@@ -420,12 +435,9 @@ require_once 'views/header.php';
             success: function(response) {
                 console.log(response);
                 $('#exampleModal').modal('show');
-
             }
         });
-
     }
-
     function letraDNI(){
         var letter = document.getElementById("nifLet");
         var dni = document.getElementById("nifNum").value;
@@ -439,6 +451,11 @@ require_once 'views/header.php';
         letter.value=letra;
     }
 </script>
+
+
+
+
+
 
 
 

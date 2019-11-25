@@ -23,10 +23,8 @@ class Pedido
 
     //Devolver un atributo de un pedido
     function devolverPedido($numLineaPedido, $cant, $cantDevolver, $idProducto){
-        echo $cantDevolver;
-        echo $cant;
         $tool = new Tools();
-        //actualizar la linea de pedido si no se ha devuelto todo
+        //actualizar la linea de pedido si no se ha devuelto
         if($cant>$cantDevolver) {
             $nuevaCant = $cant-$cantDevolver;
             $sqlUpdatePedido = "UPDATE lineapedido set cantidad='$nuevaCant'";
@@ -57,10 +55,19 @@ class Pedido
 
     function enviarPedidosPendientes($refPedido){
         $tool = new Tools();
-        $date=date("m.d.y");
+        $date=date("Y-m-d h:i:s");
+        $date = date('Y-m-d h:i:s', strtotime(str_replace('-', '/', $date)));
         $sqlUpdate = "UPDATE pedido set fechaEnvio = '$date' where refPedido=$refPedido";
         $tool->insertData($sqlUpdate);
     }
+
+    function pedidosPendientesUser($dni){
+        $sql = "SELECT * FROM pedido WHERE dni='$dni'";
+        $tool = new Tools();
+        $array = $tool->getArraySQL($sql);
+        return $array;
+    }
+
 
 
 

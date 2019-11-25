@@ -41,6 +41,14 @@
                 </div>';
 
         }
+
+        if ($_SESSION['rol'] === 'Usuario') {
+            echo '
+              <div class="block">
+                 <input type="submit" value="Pendiente de Envío" onclick = "location=\'index.php?pending=pending\'" class="btnBuy"/>
+                </div>';
+
+        }
     }
 
     ?>

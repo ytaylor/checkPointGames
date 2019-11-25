@@ -14,16 +14,16 @@ foreach ($array as $item=>$rows){
     <div class="row no-gutters">
         <div id="boxLeft">
           <h2>
-            <img src="images/coversGames/'.$rows["nameImg"].'" width="100%" height="100%">
+            <img src="images/coversGames/'.$rows["nameImg"].'" width="65%" height="55%">
           </h2>
           <h2>
             <p class="txtPurple">Precio: '.$rows["price"].'€</p>
             <input type="hidden" name="price" value="'.$rows["price"].' id="price"></input>';
             if($rows["new"] == 1){
-              echo'<img src="images/icons/icon_new.png" width="45%" height="45%">';
+              echo'<img src="images/icons/icon_new.png" width="20%" height="12%">';
             }
             if($rows["ofert"] == 1){
-              echo'<img src="images/icons/icon_ofert.png" width="45%" height="45%">';
+              echo'<img src="images/icons/icon_ofert.png" width="20%" height="12%">';
             }
         echo'
           </h2>

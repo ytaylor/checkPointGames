@@ -1,15 +1,13 @@
-<!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
-
 <div class="col-12">
     <h1 align="center">¿Quiere realizar una devolución?</h1>
     <table id="tree-table" class="table table-hover table-bordered">
         <tbody>
-<?php
-$pedido = new Pedido();
-$array = $pedido->getDataPedido();
-// Mostrar las categorias
-foreach ($array as $key=>$rows) {
-    echo '
+        <?php
+        $pedido = new Pedido();
+        $array = $pedido->getDataPedido();
+        // Mostrar las categorias
+        foreach ($array as $key=>$rows) {
+            echo '
      <tr  data-id='.$rows['refPedido'].' data-parent="0" data-level="1">
         <td class="zonePurple" colspan="7" data-column="name"><span class="icon-down-open"></span>Fecha :' . $rows['fecha'] . '</td>       
     </tr>
@@ -20,8 +18,8 @@ foreach ($array as $key=>$rows) {
         <td colspan="2">Total :' . $rows['total'] . '</td>
     </tr>
     ';
-    $array_lineaspedido = $pedido->getDataLineaPedido($rows['refPedido']);
-    echo '
+            $array_lineaspedido = $pedido->getDataLineaPedido($rows['refPedido']);
+            echo '
     <tr class="zonePurple3" data-id='.$rows['refPedido'].'+2 data-parent='.$rows['refPedido'].'+1 data-level="3">
         <td>Linea de Pedido</td>
         <td>Nombre</td>
@@ -32,8 +30,8 @@ foreach ($array as $key=>$rows) {
         <td>Devolver</td>
     </tr>
 ';
-    foreach ($array_lineaspedido as $item2 => $rows2) {
-        echo '
+            foreach ($array_lineaspedido as $item2 => $rows2) {
+                echo '
     <tr data-id='.$rows2['numPedido'].' data-parent='.$rows['refPedido'].'+1 data-level="3">
         <td>'.$rows2['numPedido'].'</td>
         <td>'.$rows2['nombre'].'</td>
@@ -54,8 +52,8 @@ foreach ($array as $key=>$rows) {
         </td>
     </tr>
     ';
-    }
-    echo '
+            }
+            echo '
     <tr data-id='.$rows2['numPedido'].' data-parent='.$rows['refPedido'].'+1 data-level="3">
         <td colspan="8">
 
@@ -64,12 +62,12 @@ foreach ($array as $key=>$rows) {
         </td>
         </tr>
     ';
-}
-   ?>
+        }
+        ?>
 
-   </tbody>
+        </tbody>
 
-</table>
+    </table>
 </div>
 
 
